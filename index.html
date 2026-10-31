@@ -259,7 +259,35 @@ body { font-family: var(--serif); background: var(--jade); color: var(--text); o
     margin-bottom: 0;
 }
 
-
+/* =========================================
+   GALLERY (masonry collage)
+========================================= */
+/* Same colour as .story so the two sections read as one surface */
+.story { padding-bottom: 36px; }          /* <-- space between the story text and the first photo */
+ 
+.gallery {
+    --gap: 4px;                            /* <-- space between photos (also the side margins on desktop) */
+    background: #d4e4def2;                 /* must match .story's background */
+    padding: 0 0 var(--gap);
+}
+.gallery-wrap { max-width: 1100px; margin: 0 auto; }
+ 
+.g-item { margin: 0; overflow: hidden; background: #c3d6cd; }
+.g-item img {
+    display: block; width: 100%; height: auto;
+    aspect-ratio: var(--ratio, auto);      /* placeholder ratio; delete the --ratio on a figure to use the photo's own shape */
+    object-fit: cover;
+}
+ 
+/* First photo: landscape, full width, flat top edge */
+.g-top { margin-bottom: var(--gap); }
+ 
+/* The other 10: masonry columns (2 on phones, 3 on wider screens) */
+.g-cols { columns: 2; column-gap: var(--gap); }
+.g-cols .g-item { break-inside: avoid; margin-bottom: var(--gap); }
+@media (min-width: 700px) { .g-cols { columns: 3; } }
+ 
+ 
 /* =========================================
    SCROLL REVEALS
 ========================================= */
@@ -342,7 +370,29 @@ body { font-family: var(--serif); background: var(--jade); color: var(--text); o
             <p>Through it all, Jehovah has been our strength and guide, complemented by the inspiring examples of couples around us. Looking back with full hearts, we’re ready for the road ahead. Twenty years down, a lifetime to go.</p>
         </div>
     </section>
-
+<!-- GALLERY -->
+<section class="gallery" aria-label="Photo gallery">
+    <div class="gallery-wrap">
+ 
+        <figure class="g-item g-top reveal" style="--ratio: 3/2">
+            <img src="gall1.jpg" alt="Gallery photo 1" loading="eager" decoding="async">
+        </figure>
+ 
+        <div class="g-cols">
+            <figure class="g-item reveal" style="--ratio: 3/4"><img src="gallery-2.jpg"  alt="Gallery photo 2"  loading="lazy" decoding="async"></figure>
+            <figure class="g-item reveal" style="--ratio: 1/1"><img src="gallery-3.jpg"  alt="Gallery photo 3"  loading="lazy" decoding="async"></figure>
+            <figure class="g-item reveal" style="--ratio: 2/3"><img src="gallery-4.jpg"  alt="Gallery photo 4"  loading="lazy" decoding="async"></figure>
+            <figure class="g-item reveal" style="--ratio: 4/5"><img src="gallery-5.jpg"  alt="Gallery photo 5"  loading="lazy" decoding="async"></figure>
+            <figure class="g-item reveal" style="--ratio: 3/2"><img src="gallery-6.jpg"  alt="Gallery photo 6"  loading="lazy" decoding="async"></figure>
+            <figure class="g-item reveal" style="--ratio: 4/5"><img src="gallery-7.jpg"  alt="Gallery photo 7"  loading="lazy" decoding="async"></figure>
+            <figure class="g-item reveal" style="--ratio: 1/1"><img src="gallery-8.jpg"  alt="Gallery photo 8"  loading="lazy" decoding="async"></figure>
+            <figure class="g-item reveal" style="--ratio: 3/4"><img src="gallery-9.jpg"  alt="Gallery photo 9"  loading="lazy" decoding="async"></figure>
+            <figure class="g-item reveal" style="--ratio: 2/3"><img src="gallery-10.jpg" alt="Gallery photo 10" loading="lazy" decoding="async"></figure>
+            <figure class="g-item reveal" style="--ratio: 4/3"><img src="gallery-11.jpg" alt="Gallery photo 11" loading="lazy" decoding="async"></figure>
+        </div>
+ 
+    </div>
+</section>
     <!-- ADDITIONAL SECTIONS GO BELOW -->
 
 </main>
