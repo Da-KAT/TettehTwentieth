@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>You are invited</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #00a86b;            /* jade green */
+    --heart: #8fe3c1;         /* light green hearts */
+    --paper: #f3ead8;         /* envelope cream */
+    --paper-dark: #e2d3b4;
+    --gold: #d4b878;          /* light gold accent */
+    --gold-deep: #b99a55;
+    --text: #fbf7ef;
+    --card-ratio: 7 / 5;      /* match your card image's aspect ratio */
+    --card-img: url("hero.jpg");
+    --hero-img: url("hero.jpg");
+    --flower-left: none;      /* e.g. url("flower-left.png") */
+    --flower-right: none;     /* e.g. url("flower-right.png") */
+    --tile: 240px;            /* heart pattern tile size (spacing) */
+    --serif: "Cormorant Garamond", Georgia, serif;
+  }
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; }
+  html.locked, html.locked body { overflow: hidden; }
+  body { font-family: var(--serif); background: var(--bg); color: var(--text); }
+
+  /* ---------- Drifting hearts (reusable: drop <div class="hearts"> in any section) ---------- */
+  .hearts { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+  .hearts::before {
+    content: ""; position: absolute; inset: calc(var(--tile) * -1) 0 0 calc(var(--tile) * -1);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cg fill='%238fe3c1' fill-opacity='.45'%3E%3Cpath transform='translate(50 50)' d='M12 21s-7-4.6-9.5-9C.9 8.4 2.7 4.5 6.4 4.5c2.2 0 4.2 1.3 5.6 3.2 1.4-1.9 3.4-3.2 5.6-3.2 3.7 0 5.5 3.9 3.9 7.5C19 16.4 12 21 12 21z'/%3E%3Cpath transform='translate(165 160) scale(.8)' d='M12 21s-7-4.6-9.5-9C.9 8.4 2.7 4.5 6.4 4.5c2.2 0 4.2 1.3 5.6 3.2 1.4-1.9 3.4-3.2 5.6-3.2 3.7 0 5.5 3.9 3.9 7.5C19 16.4 12 21 12 21z'/%3E%3C/g%3E%3C/svg%3E");
+    background-size: var(--tile) var(--tile);
+    animation: drift 50s linear infinite; will-change: transform;
+  }
+  @keyframes drift { to { transform: translate(var(--tile), var(--tile)); } }
+  @media (prefers-reduced-motion: reduce) { .hearts::before { animation: none; } }
+
+  /* ---------- Intro ---------- */
+  #intro {
+    position: fixed; inset: 0; height: 100dvh; z-index: 100;
+    display: grid; place-items: center; overflow: hidden;
+    cursor: pointer; -webkit-tap-highlight-color: transparent;
+  }
+  #intro.loading { cursor: progress; }
+  #intro:focus-visible { outline: 3px solid var(--gold); outline-offset: -6px; }
+  .intro-bg { position: absolute; inset: 0; background: var(--bg); }
+
+  /* Flower placeholders: bottom corners, 50% opacity, tapering out toward the top */
+  .flower {
+    position: absolute; bottom: 0; width: min(46vw, 300px); aspect-ratio: 3 / 4; opacity: .5;
+    background: center / cover no-repeat rgba(255,255,255,.4);
+    -webkit-mask-image: linear-gradient(to top, #000 25%, transparent 100%);
+            mask-image: linear-gradient(to top, #000 25%, transparent 100%);
+  }
+  .flower.left  { left: 0;  background-image: var(--flower-left); }
+  .flower.right { right: 0; background-image: var(--flower-right); }
+
+  .env {
+    position: relative; z-index: 1;
+    width: min(88vw, 560px); aspect-ratio: 3 / 2;
+    perspective: 1400px;
+  }
+  .env-back {
+    position: absolute; inset: 0; background: var(--paper);
+    box-shadow: 0 30px 60px rgba(0,0,0,.35);
+  }
+  .env-back::after, .flap::after {
+    content: ""; position: absolute; inset: 7px; border: 1px solid var(--gold); pointer-events: none;
+  }
+  .card {
+    position: absolute; z-index: 1; left: 5%; top: 7%;
+    width: 90%; aspect-ratio: var(--card-ratio);
+    max-height: 86%; margin: 0;
+    background: center / cover no-repeat var(--card-img);
+    will-change: transform, opacity;
+  }
+  .flap {
+    position: absolute; z-index: 2; top: 0; bottom: 0; width: 50%;
+    background: linear-gradient(var(--paper), var(--paper-dark));
+    backface-visibility: hidden; will-change: transform, opacity;
+  }
+  .flap.left  { left: 0;  transform-origin: left center; }
+  .flap.right { right: 0; transform-origin: right center; }
+  /* seam side has no gold edge so the two halves read as one envelope */
+  .flap.left::after  { border-right: 0; }
+  .flap.right::after { border-left: 0; }
+  /* ribbon: each flap carries half, so it splits when the doors open */
+  .flap::before {
+    content: ""; position: absolute; left: 0; right: 0; top: 42%; height: 16%;
+    background: linear-gradient(var(--gold-deep), var(--gold) 35%, #ecdcab 50%, var(--gold) 65%, var(--gold-deep));
+    box-shadow: 0 2px 6px rgba(0,0,0,.18);
+  }
+
+  .seal {
+    position: absolute; z-index: 3; left: 50%; top: 50%;
+    width: 72px; height: 72px; margin: -36px 0 0 -36px; border-radius: 50%;
+    display: grid; place-items: center;
+    background: radial-gradient(circle at 35% 30%, #ecdcab, var(--gold) 55%, var(--gold-deep));
+    color: #5a4519; font: 500 1.7rem/1 var(--serif);
+    box-shadow: 0 4px 14px rgba(0,0,0,.35);
+    transition: opacity .3s;
+  }
+  #intro.loading .seal { opacity: .5; }
+  .hint {
+    position: absolute; z-index: 1; bottom: calc(env(safe-area-inset-bottom, 0px) + 8vh);
+    left: 0; right: 0; text-align: center; font-size: 1.2rem; letter-spacing: .04em;
+    opacity: .9; pointer-events: none;
+  }
+
+  /* ---------- Hero ---------- */
+  .hero {
+    position: relative; min-height: 100dvh;
+    display: flex; flex-direction: column; justify-content: flex-end; align-items: center;
+    text-align: center; padding: 0 20px calc(env(safe-area-inset-bottom, 0px) + 7vh);
+    background: center / cover no-repeat var(--hero-img);
+  }
+  .hero::before {
+    content: ""; position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,.85) 0%, rgba(0,0,0,.55) 40%, transparent 70%);
+  }
+  .hero > * { position: relative; }
+  .kicker { margin: 0; font-size: clamp(1.1rem, min(5vw, 3dvh), 1.8rem); letter-spacing: .06em; }
+  .hero h1 { margin: .1em 0 0; font-weight: 500; line-height: .95; }
+  .hero h1 .num  { display: block; font-size: min(36vw, 16dvh); line-height: .9; }
+  .hero h1 .rest { display: block; font-size: min(16vw, 7dvh); }
+  .kicker, .hero h1 { opacity: 0; transform: translateY(16px); transition: opacity .9s ease, transform .9s ease; }
+  .hero h1 { transition-delay: .25s; }
+  .hero.in .kicker, .hero.in h1 { opacity: 1; transform: none; }
+
+  /* Add your next sections (details, RSVP, etc.) below the hero */
+</style>
+</head>
+<body>
+
+<div id="intro" class="loading" role="button" tabindex="0" aria-label="Open the invitation">
+  <div class="intro-bg">
+    <div class="hearts"></div>
+    <div class="flower left"></div>
+    <div class="flower right"></div>
+  </div>
+  <div class="env">
+    <div class="env-back"></div>
+    <div class="card"></div>
+    <div class="flap left"></div>
+    <div class="flap right"></div>
+    <div class="seal" aria-hidden="true">20</div>
+  </div>
+  <div class="hint">Tap anywhere to open</div>
+</div>
+
+<main>
+  <section class="hero" id="hero">
+    <p class="kicker">You are invited</p>
+    <h1><span class="num">20th</span><span class="rest">wedding<br>anniversary</span></h1>
+  </section>
+  <!-- more sections here -->
+</main>
+
+<script>
+(() => {
+  const root = document.documentElement;
+  const $ = (s) => document.querySelector(s);
+  const intro = $('#intro'), card = $('.card'), hero = $('#hero');
+  const parts = ['.intro-bg', '.env-back', '.flap.left', '.flap.right', '.seal', '.hint'].map($);
+
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let seen = false;
+  try { seen = !!sessionStorage.getItem('introSeen'); } catch {}
+  const force = location.search.includes('intro');   // add ?intro to replay while testing
+
+  function finish() {
+    intro.remove();
+    root.classList.remove('locked');
+    hero.classList.add('in');
+    try { sessionStorage.setItem('introSeen', '1'); } catch {}
+  }
+
+  if (reduce || (seen && !force)) { finish(); return; }
+  root.classList.add('locked');
+
+  // Preload both images so the doors never open onto nothing
+  let ready = false;
+  const load = (src) => new Promise((res) => { const i = new Image(); i.onload = i.onerror = res; i.src = src; });
+  const css = (v) => getComputedStyle(root).getPropertyValue(v).match(/url\(["']?(.*?)["']?\)/)?.[1];
+  Promise.all([load(css('--card-img')), load(css('--hero-img'))]).then(() => {
+    ready = true; intro.classList.remove('loading');
+  });
+
+  const ease = 'cubic-bezier(.65,0,.35,1)';
+  const play = (el, kf, ms, extra = {}) =>
+    el.animate(kf, { duration: ms, easing: ease, fill: 'forwards', ...extra }).finished;
+
+  let started = false;
+  async function open() {
+    if (started || !ready) return;
+    started = true;
+    intro.style.cursor = 'default';
+    const b = card.getBoundingClientRect();   // measured before any transform
+
+    // 1. Doors open from the middle out
+    await Promise.all([
+      play($('.seal'), [{ opacity: 1 }, { opacity: 0 }], 300),
+      play($('.hint'), [{ opacity: .9 }, { opacity: 0 }], 300),
+      play($('.flap.left'),  [{ transform: 'rotateY(0)' }, { transform: 'rotateY(-100deg)' }], 1000),
+      play($('.flap.right'), [{ transform: 'rotateY(0)' }, { transform: 'rotateY(100deg)' }], 1000),
+    ]);
+
+    // 2. Card rises and grows a little
+    await play(card, [{ transform: 'none' }, { transform: 'translateY(-14%) scale(1.05)' }], 800);
+
+    // 3. Card zooms to fill the screen while the envelope + background fade away
+    const dx = innerWidth / 2 - (b.left + b.width / 2);
+    const dy = innerHeight / 2 - (b.top + b.height / 2);
+    const s = Math.max(innerWidth / b.width, innerHeight / b.height);
+    parts.forEach((p) => play(p, [{ opacity: getComputedStyle(p).opacity }, { opacity: 0 }], 500));
+    await play(card, [
+      { transform: 'translateY(-14%) scale(1.05)' },
+      { transform: `translate(${dx}px, ${dy}px) scale(${s})` },
+    ], 1300);
+
+    // 4. Crossfade card -> hero
+    hero.classList.add('in');
+    await play(card, [{ opacity: 1 }, { opacity: 0 }], 800);
+    finish();
+  }
+
+  intro.addEventListener('click', open);
+  intro.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); }
+  });
+})();
+</script>
+</body>
+</html>
