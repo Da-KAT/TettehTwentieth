@@ -485,6 +485,145 @@ body { font-family: var(--serif); background: var(--jade); color: var(--text); o
     .fade-green-to-white { height: 120px; }
     .fade-white-to-green { height: 130px; padding: 0 20px 16px; }
 }
+
+/* =========================================
+   RSVP
+========================================= */
+.rsvp-section {
+    position: relative;
+    padding: 64px 24px 56px;
+    background: linear-gradient(to bottom, var(--jade-deep), #006842 55%, var(--jade-deep));
+    text-align: center;
+}
+.rsvp-panel {
+    position: relative;
+    max-width: 520px;
+    margin: 0 auto;
+    padding: 48px 28px 40px;
+    background: rgba(0, 77, 48, .28);
+}
+.rsvp-panel::before, .rsvp-panel::after {
+    content: ""; position: absolute; width: 38px; height: 38px; pointer-events: none;
+}
+.rsvp-panel::before { top: 0; left: 0; border-top: 1px solid var(--gold); border-left: 1px solid var(--gold); }
+.rsvp-panel::after  { bottom: 0; right: 0; border-bottom: 1px solid var(--gold); border-right: 1px solid var(--gold); }
+
+.rsvp-panel h2 {
+    margin: 0 0 .5rem; color: var(--gold-light);
+    font-family: var(--display); font-style: italic; font-weight: 500;
+    font-size: clamp(2.2rem, 7vw, 3.2rem); line-height: 1.05;
+}
+.rsvp-sub {
+    margin: 0 0 1.8rem; color: var(--text); opacity: .9;
+    font-family: var(--serif); font-size: clamp(1rem, 3.2vw, 1.2rem); line-height: 1.4;
+}
+.rsvp-note {
+    margin: 0 0 2rem; padding: 0 4px;
+    color: var(--text);
+    font-family: var(--serif); font-style: italic; font-weight: 500;
+    font-size: clamp(1.1rem, 3.4vw, 1.3rem); line-height: 1.45;
+}
+.rsvp-note strong {
+    display: block; margin-bottom: .25em;
+    color: var(--gold-light); font-style: normal; font-weight: 500;
+    letter-spacing: .1em; text-transform: uppercase; font-size: .85em;
+}
+
+.rsvp-input {
+    width: 100%; margin: 0 0 14px; padding: 15px 16px;
+    background: rgba(80, 200, 120, .12);
+    border: 1px solid rgba(80, 200, 120, .45);
+    border-radius: 0; color: var(--text);
+    font-family: var(--serif); font-size: 1.25rem; font-weight: 500; text-align: center;
+    outline: none; -webkit-appearance: none; appearance: none;
+}
+.rsvp-input::placeholder { color: rgba(251, 247, 239, .55); }
+.rsvp-input:focus { border-color: var(--emerald); background: rgba(80, 200, 120, .2); }
+.rsvp-input.err { border-color: #f2b8a0; animation: shake .35s; }
+@keyframes shake { 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+
+.rsvp-choices { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.rsvp-btn {
+    padding: 15px 6px; cursor: pointer;
+    background: rgba(80, 200, 120, .16);
+    border: 1px solid rgba(80, 200, 120, .55);
+    color: var(--text);
+    font-family: var(--serif); font-size: 1.15rem; font-weight: 600; letter-spacing: .06em;
+    transition: background .2s, border-color .2s, transform .1s;
+    -webkit-tap-highlight-color: transparent;
+}
+.rsvp-btn:hover { background: rgba(80, 200, 120, .3); border-color: var(--emerald); }
+.rsvp-btn:active { transform: scale(.97); }
+.rsvp-btn:disabled { opacity: .55; cursor: progress; }
+
+.rsvp-error { min-height: 1.4em; margin: 14px 0 0; color: #f6c9b5; font-size: 1rem; }
+
+.rsvp-done { display: none; padding: 20px 0 10px; }
+.rsvp-done.show { display: block; animation: fadeUp .8s ease both; }
+.rsvp-done h3 {
+    margin: 0 0 .5rem; color: var(--gold-light);
+    font-family: var(--names-font); font-style: italic; font-weight: 500;
+    font-size: clamp(1.7rem, 5.5vw, 2.3rem);
+}
+.rsvp-done p { margin: 0; color: var(--text); font-size: 1.2rem; line-height: 1.4; }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+
+
+/* =========================================
+   HELP SNIPPET
+========================================= */
+.help {
+    background: var(--jade-deep);
+    padding: 8px 24px 44px;
+    text-align: center;
+}
+.help h3 {
+    margin: 0 0 .3rem; color: var(--gold-light);
+    font-family: var(--names-font); font-style: italic; font-weight: 500;
+    font-size: clamp(1.5rem, 5vw, 2rem);
+}
+.help p {
+    margin: 0 0 1.1rem; color: var(--text); opacity: .9;
+    font-size: clamp(1.05rem, 3.4vw, 1.25rem);
+}
+.wa-btn {
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 13px 26px;
+    background: var(--emerald); color: #00331f;
+    font-family: var(--serif); font-size: 1.15rem; font-weight: 600; letter-spacing: .04em;
+    text-decoration: none;
+    transition: background .2s, transform .1s;
+}
+.wa-btn:hover { background: #6fd68f; }
+.wa-btn:active { transform: scale(.97); }
+.wa-btn svg { width: 20px; height: 20px; fill: currentColor; }
+
+
+/* =========================================
+   FOOTER
+========================================= */
+.footer {
+    background: var(--jade-deep);
+    padding: 0 20px calc(env(safe-area-inset-bottom, 0px) + 22px);
+    text-align: center;
+}
+.walk {
+    display: block; width: min(100%, 480px); height: auto; margin: 0 auto;
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 22%);
+            mask-image: linear-gradient(to bottom, transparent 0%, #000 22%);
+}
+.built-by {
+    display: inline-flex; align-items: center; gap: 5px; margin-top: 14px;
+    color: var(--gold-light); opacity: .7;
+    font-family: var(--serif); font-size: .85rem; letter-spacing: .04em;
+    text-decoration: underline; text-underline-offset: 3px;
+    text-decoration-color: rgba(230, 203, 141, .6);
+}
+.built-by:hover { opacity: 1; }
+.built-by svg {
+    width: 12px; height: 12px; fill: none; stroke: currentColor;
+    stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round;
+}
 </style>
 </head>
 
@@ -645,7 +784,61 @@ body { font-family: var(--serif); background: var(--jade); color: var(--text); o
         </div>
     </section>
 
-    <!-- ADDITIONAL SECTIONS GO BELOW -->
+        <!-- RSVP -->
+    <section class="rsvp-section" id="rsvp" aria-labelledby="rsvp-title">
+        <div class="rsvp-panel reveal">
+            <h2 id="rsvp-title">RSVP</h2>
+            <p class="rsvp-sub">Kindly let us know if you&rsquo;ll be joining us.</p>
+
+            <p class="rsvp-note">
+                <strong>A special evening for the grown-ups</strong>
+                We kindly request that this invitation be enjoyed by the two of you.
+            </p>
+
+            <div id="rsvp-form">
+                <input class="rsvp-input" id="rsvp-name" type="text" placeholder="Your name"
+                       autocomplete="name" maxlength="80" aria-label="Your name">
+                <div class="rsvp-choices">
+                    <button class="rsvp-btn" type="button" data-r="Yes">Yes</button>
+                    <button class="rsvp-btn" type="button" data-r="No">No</button>
+                    <button class="rsvp-btn" type="button" data-r="Unsure">Unsure</button>
+                </div>
+                <p class="rsvp-error" id="rsvp-error" role="alert"></p>
+            </div>
+
+            <div class="rsvp-done" id="rsvp-done" aria-live="polite">
+                <h3>Thank you<span id="rsvp-who"></span></h3>
+                <p>Your response has been sent.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- HELP -->
+    <section class="help">
+        <div class="reveal">
+            <h3>Need any help?</h3>
+            <p>Kenan Addokwei Tetteh</p>
+            <a class="wa-btn" href="https://wa.me/233506879550" target="_blank" rel="noopener noreferrer">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm5.3 14.2c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.3-.7-2.800-1.100-4.600-4-4.700-4.200-.1-.2-1.100-1.500-1.100-2.800s.7-2 1-2.300c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.2.1.4 0 .5l-.4.6c-.1.200-.3.300-.1.600.2.300.8 1.300 1.700 2.100 1.200 1 2.100 1.300 2.400 1.500.3.1.5.1.6-.1l.9-1.100c.2-.3.4-.2.600-.1l1.900.9c.3.1.5.2.5.3.1.2.1.8-.1 1.400Z"/></svg>
+                Open WhatsApp
+            </a>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <img class="walk" src="walking.gif" alt="" loading="lazy" decoding="async">
+        <div>
+            <a class="built-by" href="https://YOUR-ARETHOS-LINK" target="_blank" rel="noopener noreferrer">
+                Built by Arethos
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M14 3h7v7"></path>
+                    <path d="M10 14 21 3"></path>
+                    <path d="M19 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h6"></path>
+                </svg>
+            </a>
+        </div>
+    </footer>
 
 </main>
 
@@ -742,6 +935,46 @@ const observer = new IntersectionObserver((entries) => {
 }, { threshold: .25 });
 document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
 </script>
+<script>
+(() => {
+    const RSVP_URL = 'https://script.google.com/macros/s/AKfycbyaBEhQXct-Xc-8xYuViaz8RbA-VEy2GE9tDPy_mJU8R_IA10N_Y0kqBFdujtS1WEtYDg/exec';
+
+    const nameEl = document.getElementById('rsvp-name');
+    const errEl  = document.getElementById('rsvp-error');
+    const form   = document.getElementById('rsvp-form');
+    const done   = document.getElementById('rsvp-done');
+    const who    = document.getElementById('rsvp-who');
+    const btns   = document.querySelectorAll('.rsvp-btn');
+
+    btns.forEach((b) => b.addEventListener('click', async () => {
+        const name = nameEl.value.trim();
+        errEl.textContent = '';
+        if (name.length < 2) {
+            nameEl.classList.add('err');
+            errEl.textContent = 'Please enter your name first.';
+            nameEl.focus();
+            setTimeout(() => nameEl.classList.remove('err'), 400);
+            return;
+        }
+        btns.forEach((x) => (x.disabled = true));
+        try {
+            // no-cors: Apps Script doesn't send CORS headers; the response is opaque but the row still lands
+            await fetch(RSVP_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                body: new URLSearchParams({ name, response: b.dataset.r }),
+            });
+            who.textContent = ', ' + name.split(' ')[0];
+            form.style.display = 'none';
+            done.classList.add('show');
+        } catch {
+            errEl.textContent = 'Could not send. Check your connection and try again.';
+            btns.forEach((x) => (x.disabled = false));
+        }
+    }));
+})();
+</script>
+
 
 </body>
 </html>
